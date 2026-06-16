@@ -1,0 +1,7 @@
+if(TARGET OrigamiRobotModule)
+  set(ROBOT_MODULE_PARAMS "\"OrigamiRobotModule\"")
+  configure_file("${CMAKE_CURRENT_SOURCE_DIR}/loader.in.cpp" "${CMAKE_CURRENT_BINARY_DIR}/OrigamiRobotModule/loader.cpp")
+  add_executable(loader_OrigamiRobotModule "${CMAKE_CURRENT_BINARY_DIR}/OrigamiRobotModule/loader.cpp")
+  target_link_libraries(loader_OrigamiRobotModule PUBLIC mc_rtc::mc_rbdyn)
+  add_test(NAME loader_OrigamiRobotModule COMMAND loader_OrigamiRobotModule "$<TARGET_FILE_DIR:OrigamiRobotModule>")
+endif()
