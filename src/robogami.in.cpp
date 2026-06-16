@@ -33,9 +33,9 @@ RobogamiRobotModule::RobogamiRobotModule() : mc_rbdyn::RobotModule(ROBOGAMI_DESC
   _stance["x_l2roty"] = {17.0 * mc_rtc::constants::PI / 18.0}; //{3.054326};//{mc_rtc::constants::PI / 2.0};
   _stance["x_l1roty"] = {17.0 * mc_rtc::constants::PI / 18.0}; //{3.054326};//{mc_rtc::constants::PI / 2.0};
 
-  _stance["x_l1topTop"] = {5.0 * mc_rtc::constants::PI / 180.0}; //{0.08726646};//{mc_rtc::constants::PI / 4.0};
-  _stance["x_l2TopMove"] = {5.0 * mc_rtc::constants::PI / 180.0}; //{0.08726646};//{mc_rtc::constants::PI / 4.0};
-  _stance["x_l3TopMove"] = {5.0 * mc_rtc::constants::PI / 180.0}; //{0.08726646};//{mc_rtc::constants::PI / 4.0};
+  _stance["l1topBase"] = {5.0 * mc_rtc::constants::PI / 180.0}; //{0.08726646};//{mc_rtc::constants::PI / 4.0};
+  _stance["l2TopMove"] = {5.0 * mc_rtc::constants::PI / 180.0}; //{0.08726646};//{mc_rtc::constants::PI / 4.0};
+  _stance["l3TopMove"] = {5.0 * mc_rtc::constants::PI / 180.0}; //{0.08726646};//{mc_rtc::constants::PI / 4.0};
 }
 
 }
