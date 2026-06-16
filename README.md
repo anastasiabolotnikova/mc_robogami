@@ -19,3 +19,8 @@ cd build
 make
 sudo make install
 ```
+
+## Use
+Once installed, robot module can be used in an mc_rtc controller.
+
+Refer to [robogami_controller](https://github.com/anastasiabolotnikova/robogami_controller) for an example.
