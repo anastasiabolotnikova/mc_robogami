@@ -24,18 +24,19 @@ RobogamiRobotModule::RobogamiRobotModule() : mc_rbdyn::RobotModule(ROBOGAMI_DESC
   mc_rtc::log::info("Using {} URDF file to initialize Robogami", urdf_path);
   init(rbd::parsers::from_urdf_file(urdf_path, fixed));
 
-    // Default joint configuration
-  _stance["l1"] = {5.0 * mc_rtc::constants::PI / 180.0}; //{0.08726646};//mc_rtc::constants::PI / 4.0};
-  _stance["l2"] = {5.0 * mc_rtc::constants::PI / 180.0}; //{0.08726646};//{mc_rtc::constants::PI / 4.0};
-  _stance["l3"] = {5.0 * mc_rtc::constants::PI / 180.0}; //{0.08726646};//{mc_rtc::constants::PI / 4.0};
+  // Default joint configuration
+  double default_leg_angle = 5.0 * mc_rtc::constants::PI / 180.0; // 5 degrees
+  double default_sphereY_angle = mc_rtc::constants::PI - default_leg_angle*2.0;
 
-  _stance["x_l3roty"] = {17.0 * mc_rtc::constants::PI / 18.0}; //{3.054326};//{mc_rtc::constants::PI / 2.0};
-  _stance["x_l2roty"] = {17.0 * mc_rtc::constants::PI / 18.0}; //{3.054326};//{mc_rtc::constants::PI / 2.0};
-  _stance["x_l1roty"] = {17.0 * mc_rtc::constants::PI / 18.0}; //{3.054326};//{mc_rtc::constants::PI / 2.0};
-
-  _stance["l1topBase"] = {5.0 * mc_rtc::constants::PI / 180.0}; //{0.08726646};//{mc_rtc::constants::PI / 4.0};
-  _stance["l2TopMove"] = {5.0 * mc_rtc::constants::PI / 180.0}; //{0.08726646};//{mc_rtc::constants::PI / 4.0};
-  _stance["l3TopMove"] = {5.0 * mc_rtc::constants::PI / 180.0}; //{0.08726646};//{mc_rtc::constants::PI / 4.0};
+  _stance["l1"] = {default_leg_angle};
+  _stance["l2"] = {default_leg_angle};
+  _stance["l3"] = {default_leg_angle};
+  _stance["x_l1roty"] = {default_sphereY_angle};
+  _stance["x_l2roty"] = {default_sphereY_angle};
+  _stance["x_l3roty"] = {default_sphereY_angle};
+  _stance["l1topBase"] = {default_leg_angle};
+  _stance["l2TopMove"] = {default_leg_angle};
+  _stance["l3TopMove"] = {default_leg_angle};
 }
 
 }
