@@ -45,6 +45,25 @@ RobogamiRobotModule::RobogamiRobotModule() : mc_rbdyn::RobotModule(ROBOGAMI_DESC
                             {"leg2lowerRightConner", "leg2topRightConner", 0.01, 0.001, 0.},
                             {"leg3lowerLeftConner", "leg3topLeftConner", 0.01, 0.001, 0.},
                             {"leg3lowerRightConner", "leg3topRightConner", 0.01, 0.001, 0.}};
+
+  // Convex collision shapes
+  std::string convexPath = path + "/convex/" + name + "/";
+  bfs::path p(convexPath);
+  if(bfs::exists(p) && bfs::is_directory(p))
+  {
+    std::vector<bfs::path> files;
+    std::copy(bfs::directory_iterator(p), bfs::directory_iterator(), std::back_inserter(files));
+    for(const bfs::path & file : files)
+    {
+      size_t off = file.filename().string().rfind("-ch.txt");
+      if(off != std::string::npos)
+      {
+        std::string name = file.filename().string();
+        name.replace(off, 7, "");
+        _convexHull[name] = std::pair<std::string, std::string>(name, file.string());
+      }
+    }
+  }
 }
 
 }
