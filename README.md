@@ -15,6 +15,7 @@ It is an essential software component to use Robogami with [mc_rtc](https://jrl-
 
 ```
 git clone https://github.com/anastasiabolotnikova/mc_robogami
+```
 
 ## Build-install
 
