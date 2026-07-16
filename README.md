@@ -22,6 +22,7 @@ git clone https://github.com/anastasiabolotnikova/mc_robogami
 ```
 mkdir -p build
 cd build
+cmake
 make
 sudo make install
 ```
