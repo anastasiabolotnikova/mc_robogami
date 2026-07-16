@@ -2,8 +2,7 @@
 
 #include <RBDyn/parsers/urdf.h>
 
-#include <boost/filesystem.hpp>
-namespace bfs = boost::filesystem;
+namespace fs = std::filesystem;
 
 namespace
 {
@@ -48,12 +47,12 @@ RobogamiRobotModule::RobogamiRobotModule() : mc_rbdyn::RobotModule(ROBOGAMI_DESC
 
   // Convex collision shapes
   std::string convexPath = path + "/convex/" + name + "/";
-  bfs::path p(convexPath);
-  if(bfs::exists(p) && bfs::is_directory(p))
+  fs::path p(convexPath);
+  if(fs::exists(p) && fs::is_directory(p))
   {
-    std::vector<bfs::path> files;
-    std::copy(bfs::directory_iterator(p), bfs::directory_iterator(), std::back_inserter(files));
-    for(const bfs::path & file : files)
+    std::vector<fs::path> files;
+    std::copy(fs::directory_iterator(p), fs::directory_iterator(), std::back_inserter(files));
+    for(const fs::path & file : files)
     {
       size_t off = file.filename().string().rfind("-ch.txt");
       if(off != std::string::npos)
