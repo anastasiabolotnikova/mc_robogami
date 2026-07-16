@@ -63,6 +63,10 @@ RobogamiRobotModule::RobogamiRobotModule() : mc_rbdyn::RobotModule(ROBOGAMI_DESC
       }
     }
   }
+
+  // Max distance constraints
+  _commonMaxDistances = {{"leg1lowerLeftConner", "leg1topLeftConner", 0.02, 0.029, 0.},
+                         {"leg1lowerRightConner", "leg1topRightConner", 0.02, 0.029, 0.}};
 }
 
 }
