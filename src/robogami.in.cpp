@@ -37,13 +37,11 @@ RobogamiRobotModule::RobogamiRobotModule() : mc_rbdyn::RobotModule(ROBOGAMI_DESC
   _stance["l2TopMove"] = {default_leg_angle};
   _stance["l3TopMove"] = {default_leg_angle};
 
-  // Self-collisions
-  _minimalSelfCollisions = {{"leg1lowerLeftConner", "leg1topLeftConner", 0.01, 0.001, 0.},
-                            {"leg1lowerRightConner", "leg1topRightConner", 0.01, 0.001, 0.},
-                            {"leg2lowerLeftConner", "leg2topLeftConner", 0.01, 0.001, 0.},
-                            {"leg2lowerRightConner", "leg2topRightConner", 0.01, 0.001, 0.},
-                            {"leg3lowerLeftConner", "leg3topLeftConner", 0.01, 0.001, 0.},
-                            {"leg3lowerRightConner", "leg3topRightConner", 0.01, 0.001, 0.}};
+  // Min and Max distance constraints for testing
+  _minimalSelfCollisions = {{"leg1lowerLeftConner", "leg1topLeftConner", 0.005, 0.009, 0.},
+                            {"leg1lowerLeftConner", "leg1topLeftConner", 0.013, 0.001, 0.}};
+
+  // TODO declare _minimalDistanceLimits vector in mc_rbdyn::RobotModule structure
 
   // Convex collision shapes
   std::string convexPath = path + "/convex/" + name + "/";
@@ -63,10 +61,6 @@ RobogamiRobotModule::RobogamiRobotModule() : mc_rbdyn::RobotModule(ROBOGAMI_DESC
       }
     }
   }
-
-  // Max distance constraints
-  _commonMaxDistances = {{"leg1lowerLeftConner", "leg1topLeftConner", 0.02, 0.029, 0.},
-                         {"leg1lowerRightConner", "leg1topRightConner", 0.02, 0.029, 0.}};
 }
 
 }
