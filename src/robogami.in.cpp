@@ -38,10 +38,8 @@ RobogamiRobotModule::RobogamiRobotModule() : mc_rbdyn::RobotModule(ROBOGAMI_DESC
   _stance["l3TopMove"] = {default_leg_angle};
 
   // Min and Max distance constraints for testing
-  _minimalSelfCollisions = {{"leg1lowerLeftConner", "leg1topLeftConner", 0.005, 0.009, 0.},
+  _minimalDistanceLimits = {{"leg1lowerLeftConner", "leg1topLeftConner", 0.005, 0.009, 0.},
                             {"leg1lowerLeftConner", "leg1topLeftConner", 0.013, 0.001, 0.}};
-
-  // TODO declare _minimalDistanceLimits vector in mc_rbdyn::RobotModule structure
 
   // Convex collision shapes
   std::string convexPath = path + "/convex/" + name + "/";
