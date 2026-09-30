@@ -38,7 +38,7 @@ RobogamiRobotModule::RobogamiRobotModule() : mc_rbdyn::RobotModule(ROBOGAMI_DESC
   _stance["l3TopMove"] = {default_leg_angle};
 
   // Min and Max distance constraints for testing
-  _minimalDistanceLimits = {{"leg1lowerLeftConner", "leg1topLeftConner", 0.01, 0.001, 0.},
+  _essentialDistanceLimits = {{"leg1lowerLeftConner", "leg1topLeftConner", 0.01, 0.001, 0.},
                             {"leg1lowerRightConner", "leg1topRightConner", 0.01, 0.001, 0.},
                             {"leg2lowerLeftConner", "leg2topLeftConner", 0.01, 0.001, 0.},
                             {"leg2lowerRightConner", "leg2topRightConner", 0.01, 0.001, 0.},
