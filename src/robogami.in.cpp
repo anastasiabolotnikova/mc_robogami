@@ -24,7 +24,7 @@ RobogamiRobotModule::RobogamiRobotModule() : mc_rbdyn::RobotModule(ROBOGAMI_DESC
   init(rbd::parsers::from_urdf_file(urdf_path, fixed));
 
   // Default joint configuration
-  double default_leg_angle = 5.0 * mc_rtc::constants::PI / 180.0; // 5 degrees
+  double default_leg_angle = 10.0 * mc_rtc::constants::PI / 180.0; // 10 degrees
   double default_sphereY_angle = mc_rtc::constants::PI - default_leg_angle*2.0;
 
   _stance["l1"] = {default_leg_angle};
