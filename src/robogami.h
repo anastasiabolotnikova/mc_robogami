@@ -4,6 +4,7 @@
 
 #include <mc_robots/api.h>
 
+#include <utility>
 
 namespace mc_robots
 {
@@ -11,6 +12,26 @@ namespace mc_robots
 {
 public:
   RobogamiRobotModule();
+
+  // Default leg angle, in degrees
+  static constexpr double defaultLegAngleDeg = 10.0; // deg
+
+  // Min distance constraint parameters (self-collision avoidance)
+  static constexpr double iDistMin = 0.01; // 1cm
+  static constexpr double sDistMin = 0.001; // 1mm
+  // Max distance constraint parameters
+  static constexpr double iDistMax = 0.015; // 1.5cm
+  static constexpr double sDistMax = 0.02; // 2cm
+
+  // Body pairs (lower corner, top corner) for the distance constraints
+  static inline const std::vector<std::pair<std::string, std::string>> distanceLimitCorners = {
+      {"leg1lowerLeftConner", "leg1topLeftConner"},
+      {"leg1lowerRightConner", "leg1topRightConner"},
+      {"leg2lowerLeftConner", "leg2topLeftConner"},
+      {"leg2lowerRightConner", "leg2topRightConner"},
+      {"leg3lowerLeftConner", "leg3topLeftConner"},
+      {"leg3lowerRightConner", "leg3topRightConner"},
+  };
 };
 
 } // namespace mc_robots

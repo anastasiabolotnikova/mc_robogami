@@ -24,7 +24,7 @@ RobogamiRobotModule::RobogamiRobotModule() : mc_rbdyn::RobotModule(ROBOGAMI_DESC
   init(rbd::parsers::from_urdf_file(urdf_path, fixed));
 
   // Default joint configuration
-  double default_leg_angle = 10.0 * mc_rtc::constants::PI / 180.0; // 10 degrees
+  double default_leg_angle = defaultLegAngleDeg * mc_rtc::constants::PI / 180.0;
   double default_sphereY_angle = mc_rtc::constants::PI - default_leg_angle*2.0;
 
   _stance["l1"] = {default_leg_angle};
@@ -37,21 +37,15 @@ RobogamiRobotModule::RobogamiRobotModule() : mc_rbdyn::RobotModule(ROBOGAMI_DESC
   _stance["l2TopMove"] = {default_leg_angle};
   _stance["l3TopMove"] = {default_leg_angle};
 
-  // Min and Max distance constraints for testing
-  std::vector<mc_rbdyn::DistanceLimit> distanceLimits = {
-      {"leg1lowerLeftConner", "leg1topLeftConner", 0.01, 0.001, 0.},
-      {"leg1lowerRightConner", "leg1topRightConner", 0.01, 0.001, 0.},
-      {"leg2lowerLeftConner", "leg2topLeftConner", 0.01, 0.001, 0.},
-      {"leg2lowerRightConner", "leg2topRightConner", 0.01, 0.001, 0.},
-      {"leg3lowerLeftConner", "leg3topLeftConner", 0.01, 0.001, 0.},
-      {"leg3lowerRightConner", "leg3topRightConner", 0.01, 0.001, 0.}, // end of min distance limits
-      {"leg1lowerLeftConner", "leg1topLeftConner", 0.015, 0.02, 0.}, // start of max distance limits
-      {"leg1lowerRightConner", "leg1topRightConner", 0.015, 0.02, 0.},
-      {"leg2lowerLeftConner", "leg2topLeftConner", 0.015, 0.02, 0.},
-      {"leg2lowerRightConner", "leg2topRightConner", 0.015, 0.02, 0.},
-      {"leg3lowerLeftConner", "leg3topLeftConner", 0.015, 0.02, 0.},
-      {"leg3lowerRightConner", "leg3topRightConner", 0.015, 0.02, 0.},
-  };
+  std::vector<mc_rbdyn::DistanceLimit> selfCollisionAvoidanceLimits;
+  std::vector<mc_rbdyn::DistanceLimit> maxDistanceLimits;
+  for(const auto & corners : distanceLimitCorners)
+  {
+    selfCollisionAvoidanceLimits.push_back({corners.first, corners.second, iDistMin, sDistMin, 0.});
+    maxDistanceLimits.push_back({corners.first, corners.second, iDistMax, sDistMax, 0.});
+  }
+  std::vector<mc_rbdyn::DistanceLimit> distanceLimits = selfCollisionAvoidanceLimits;
+  distanceLimits.insert(distanceLimits.end(), maxDistanceLimits.begin(), maxDistanceLimits.end());
   essentialDistanceLimits(distanceLimits);
 
   // Convex collision shapes
