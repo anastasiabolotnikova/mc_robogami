@@ -4,6 +4,7 @@
 
 #include <mc_robots/api.h>
 
+#include <algorithm>
 #include <utility>
 
 namespace mc_robots
@@ -11,17 +12,20 @@ namespace mc_robots
     struct MC_ROBOTS_DLLAPI RobogamiRobotModule : public mc_rbdyn::RobotModule
 {
 public:
-  RobogamiRobotModule();
+  RobogamiRobotModule(const std::string & name = "robogami");
 
-  // Default leg angle, in degrees
-  static constexpr double defaultLegAngleDeg = 10.0; // deg
+  // Baseline "robogami" default leg angle, in degrees
+  static constexpr double defaultLegAngleDeg = 35.0; // deg
+
+  // Top hexagon height above the bottom hexagon for default stance
+  static constexpr double stanceTopHeight = 0.093; // m
 
   // Min distance constraint parameters (self-collision avoidance)
   static constexpr double iDistMin = 0.01; // 1cm
-  static constexpr double sDistMin = 0.001; // 1mm
-  // Max distance constraint parameters
-  static constexpr double iDistMax = 0.015; // 1.5cm
-  static constexpr double sDistMax = 0.02; // 2cm
+  static constexpr double sDistMin = 0.001; // 0.1cm
+  // Max distance constraint: spherical joint security distance
+  static constexpr double maxDistTipFraction = 0.9; // 90%
+  static constexpr double maxDistInteractionMargin = 0.005; // 0.5cm
 
   // Body pairs (lower corner, top corner) for the distance constraints
   static inline const std::vector<std::pair<std::string, std::string>> distanceLimitCorners = {
@@ -40,7 +44,7 @@ extern "C"
 {
   ROBOT_MODULE_API void MC_RTC_ROBOT_MODULE(std::vector<std::string> & names)
   {
-    names = {"robogami"};
+    names = {"robogami", "robogami_small", "robogami_medium", "robogami_big"};
   }
   ROBOT_MODULE_API void destroy(mc_rbdyn::RobotModule * ptr)
   {
@@ -48,11 +52,11 @@ extern "C"
   }
   ROBOT_MODULE_API mc_rbdyn::RobotModule * create(const std::string & n)
   {
-    std::string seqName = n.substr(0, n.size()-1);
-
-    if(n == "robogami")
+    static const std::vector<std::string> valid = {"robogami", "robogami_small", "robogami_medium",
+                                                    "robogami_big"};
+    if(std::find(valid.begin(), valid.end(), n) != valid.end())
     {
-      return new mc_robots::RobogamiRobotModule();
+      return new mc_robots::RobogamiRobotModule(n);
     }
     else
     {

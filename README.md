@@ -28,6 +28,9 @@ sudo make install
 ```
 
 ## Use
-Once installed, robot module can be used in an mc_rtc controller.
+Once installed, the robot module can be used in an mc_rtc controller.
 
-Refer to [robogami_controller](https://github.com/anastasiabolotnikova/robogami_controller) for an example.
+Refer to [robogami_controller](https://github.com/anastasiabolotnikova/robogami_controller) for a
+single-module example.
+How the default stance and the max distance limits are computed from the URDF is described in
+[src/README.md](src/README.md).
