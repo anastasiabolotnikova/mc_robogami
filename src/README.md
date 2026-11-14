@@ -44,3 +44,25 @@ Each leg folds at its tip. For every leg, the lower-half and upper-half corners 
 `maxDistTipFraction` (default 0.9) and `maxDistInteractionMargin` (default 5 mm) are set in
 `robogami.h`. With the current legs this gives 31.9/36.9 mm for the small/medium/big variants
 (20.5 mm tip) and 32.0/37.0 mm for the baseline (20.6 mm tip).
+
+## Top plate / motor box self-collision
+
+For the detailed models (`robogami_small`, `robogami_medium`, `robogami_big`) one more essential distance limit keeps
+the top hexagon plate (`top`) clear of the motor boxes: a limit between the top plate and the base plate (`base`),
+offset by the height of the motor boxes standing on the base plate. Its security distance is the box height plus
+`sDistTopMotor` (3 mm) and its interaction distance the box height plus `iDistTopMotor` (5 mm):
+
+| Model | Motor box height | Security distance | Interaction distance |
+|---|---|---|---|
+| `robogami_small` | 20.0 mm | 23.0 mm | 25.0 mm |
+| `robogami_medium`, `robogami_big` | 28.5 mm | 31.5 mm | 33.5 mm |
+
+The box height is read from the URDF: the motor links' inertia is that of a uniform box, so
+`I_xx = m (y^2 + z^2) / 12` and so on give its three sizes, and the motor joint's rotation gives which one is
+vertical. The boxes sit directly on the base plate, so their height is the offset. The limit uses the existing
+`top` and `base` convex hulls; no motor hulls are needed. The baseline `robogami` model has no motor boxes and
+doesn't get this limit.
+
+This is slightly more conservative than checking each box: it also keeps the top plate at that height where it is
+over the base plate but not over a motor. In a 3x3x3 sweep of the motor angles over their range with `robogami_big`
+it reached the same targets as without it, with the plate coming down to 32.9 mm above the base plate.

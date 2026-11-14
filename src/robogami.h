@@ -27,6 +27,11 @@ public:
   static constexpr double maxDistTipFraction = 0.9; // 90%
   static constexpr double maxDistInteractionMargin = 0.005; // 0.5cm
 
+  // Detailed models: top plate vs base plate self-collision avoidance, offset by the motor box height (from the URDF)
+  // so that the top plate stays clear of the motor boxes standing on the base plate
+  static constexpr double iDistTopMotor = 0.005; // 0.5cm above the motor boxes
+  static constexpr double sDistTopMotor = 0.003; // 0.3cm above the motor boxes
+
   // Body pairs (lower corner, top corner) for the distance constraints
   static inline const std::vector<std::pair<std::string, std::string>> distanceLimitCorners = {
       {"leg1lowerLeftConner", "leg1topLeftConner"},

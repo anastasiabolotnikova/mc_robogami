@@ -14,6 +14,31 @@ static const std::string ROBOGAMI_DESCRIPTION_PATH = "@ROBOGAMI_DESCRIPTION_PATH
 namespace mc_robots
 {
 
+namespace
+{
+
+/** Vertical size (base z) of the motor1 box, from its inertia (uniform box) and its pose in the base; 0 if absent */
+double motorBoxHeight(const rbd::MultiBody & mb)
+{
+  if(!mb.jointIndexByName().count("motor1_joint")) { return 0.0; }
+  const auto & body = mb.body(mb.bodyIndexByName("motor1"));
+  double m = body.inertia().mass();
+  if(m <= 0) { return 0.0; }
+  // Inertia at the center of mass (the box center), in the link frame
+  Eigen::Vector3d c = body.inertia().momentum() / m;
+  Eigen::Matrix3d I = body.inertia().inertia() - m * (c.squaredNorm() * Eigen::Matrix3d::Identity() - c * c.transpose());
+  // Box sizes along the link axes: I_xx = m (y^2 + z^2) / 12, ...
+  Eigen::Vector3d d(std::sqrt(std::max(0.0, 6.0 / m * (I(1, 1) + I(2, 2) - I(0, 0)))),
+                    std::sqrt(std::max(0.0, 6.0 / m * (I(0, 0) + I(2, 2) - I(1, 1)))),
+                    std::sqrt(std::max(0.0, 6.0 / m * (I(0, 0) + I(1, 1) - I(2, 2)))));
+  // Extent along the base z axis: sva rotations map parent to child coordinates, so the box axes in the base frame
+  // are the rows of E and their z components the last column
+  Eigen::Matrix3d E = mb.transform(mb.jointIndexByName("motor1_joint")).rotation();
+  return E.col(2).cwiseAbs().dot(d);
+}
+
+} // namespace
+
 RobogamiRobotModule::RobogamiRobotModule(const std::string & name) : mc_rbdyn::RobotModule(ROBOGAMI_DESCRIPTION_PATH, name)
 {
   bool fixed = false;
@@ -87,7 +112,6 @@ RobogamiRobotModule::RobogamiRobotModule(const std::string & name) : mc_rbdyn::R
   }
   std::vector<mc_rbdyn::DistanceLimit> distanceLimits = selfCollisionAvoidanceLimits;
   distanceLimits.insert(distanceLimits.end(), maxDistanceLimits.begin(), maxDistanceLimits.end());
-  essentialDistanceLimits(distanceLimits);
 
   // Convex collision shapes
   std::string convexPath = path + "/convex/" + name + "/";
@@ -107,6 +131,24 @@ RobogamiRobotModule::RobogamiRobotModule(const std::string & name) : mc_rbdyn::R
       }
     }
   }
+
+  // Detailed models: keep the top plate above the motor boxes with one top/base distance limit, offset by the motor
+  // box height. The boxes stand on the base plate; their size comes from the motor link's inertia (a uniform box).
+  if(name != "robogami")
+  {
+    double h = motorBoxHeight(mb);
+    if(h > 0 && _convexHull.count("top") && _convexHull.count("base"))
+    {
+      distanceLimits.push_back({"top", "base", h + iDistTopMotor, h + sDistTopMotor, 0.});
+      mc_rtc::log::info("[{}] top/base self-collision: motor box height {:.1f} mm, security distance {:.1f} mm", name,
+                        h * 1000.0, (h + sDistTopMotor) * 1000.0);
+    }
+    else
+    {
+      mc_rtc::log::warning("[{}] no motor box or no top/base convex hull, top plate self-collision not avoided", name);
+    }
+  }
+  essentialDistanceLimits(distanceLimits);
 }
 
 }
