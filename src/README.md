@@ -64,5 +64,6 @@ vertical. The boxes sit directly on the base plate, so their height is the offse
 doesn't get this limit.
 
 This is slightly more conservative than checking each box: it also keeps the top plate at that height where it is
-over the base plate but not over a motor. In a 3x3x3 sweep of the motor angles over their range with `robogami_big`
-it reached the same targets as without it, with the plate coming down to 32.9 mm above the base plate.
+over the base plate but not over a motor. In a 5x5x5 sweep of the motor angles over their range with `robogami_big`
+it reached the same 60 of 125 targets, in the same poses, as without it: the leg limits keep the plate at least
+34.7 mm above the base plate, so this limit never even reaches its interaction distance.
