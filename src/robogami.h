@@ -24,7 +24,7 @@ public:
   static constexpr double iDistMin = 0.01; // 1cm
   static constexpr double sDistMin = 0.001; // 0.1cm
   // Max distance constraint: spherical joint security distance
-  static constexpr double maxDistTipFraction = 0.9; // 90%
+  static constexpr double maxDistTipFraction = 0.95; // 95%
   static constexpr double maxDistInteractionMargin = 0.005; // 0.5cm
 
   // Detailed models: top plate vs base plate self-collision avoidance, offset by the motor box height (from the URDF)
